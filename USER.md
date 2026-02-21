@@ -15,6 +15,10 @@ _Learn about the person you're helping. Update this as you go._
     - Automate manual, time-heavy internal processes
     - Increase and find additional clients
     - Build 3–4 apps to sell to clients weekly
+  - Biggest blockers:
+    - Hiring enough employees / team capacity constraints
+    - Need automation to offset staffing limitations
+    - Need more opportunities for tax-strategy services
 
 ## Context
 
