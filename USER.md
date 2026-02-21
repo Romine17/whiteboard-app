@@ -55,6 +55,8 @@ _Learn about the person you're helping. Update this as you go._
     - Valuation ceiling: up to 5x EBITDA
     - Preference: can be run passively
     - Geography: location-agnostic
+  - Lead list rule (>$5M outreach list):
+    - Include only targets with owner contact path (exclude broker-only contacts)
   - Collaboration preference:
     - Wants to involve 3 friend-partners with complementary skill sets for new-idea generation
   - Partner profile: Cory
