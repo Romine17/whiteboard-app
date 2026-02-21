@@ -50,6 +50,11 @@ _Learn about the person you're helping. Update this as you go._
   - Tasks to always own:
     - Closing deals
     - Developing new business ideas
+  - Business acquisition buy-box:
+    - Asking price: $2M or less
+    - Valuation ceiling: up to 5x EBITDA
+    - Preference: can be run passively
+    - Geography: location-agnostic
   - Collaboration preference:
     - Wants to involve 3 friend-partners with complementary skill sets for new-idea generation
   - Partner profile: Cory
