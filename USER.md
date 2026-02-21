@@ -19,6 +19,9 @@ _Learn about the person you're helping. Update this as you go._
     - Hiring enough employees / team capacity constraints
     - Need automation to offset staffing limitations
     - Need more opportunities for tax-strategy services
+  - Weekly rhythm:
+    - Most days are meeting-heavy (existing + prospective clients)
+    - Significant time spent managing team performance/retention and hitting numbers
 
 ## Context
 
