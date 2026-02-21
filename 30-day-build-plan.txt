@@ -1,0 +1,75 @@
+30-Day Build Plan (Tax + Non-Tax AI Products)
+
+Primary Goal (30 days)
+- Launch 2 MVPs (1 tax, 1 non-tax)
+- Validate demand with real prospects
+- Book sales calls for Chea to close
+
+MVPs to Build
+1) Tax Strategy AI Pre-Screen
+2) SOP/Workflow AI Builder (non-tax, service businesses)
+
+Team Roles
+- Chea: Offer design, positioning, sales calls, closing, final go/no-go
+- Cory: Execution management, QA, risk controls, scope discipline
+- Zack: Core architecture, coding, app logic
+- Anthony: Integrations, workflow automation, systems optimization
+
+Week 1 (Days 1–7): Scope + Assets + Alignment
+- Finalize one-line offer promise for each MVP
+- Define ICP and top pain points
+- Lock must-have v1 features (cut nice-to-haves)
+- Build workflow maps (intake -> AI -> output -> delivery)
+- Draft intake forms, prompts, output templates
+- Create sales one-pager + short demo script
+- Internal dry-run specs + QA checklist
+
+Deliverables by end of Week 1
+- Signed-off MVP brief (both products)
+- Locked scope and role ownership
+- Demo-ready messaging and templates
+
+Week 2 (Days 8–14): Build MVPs
+- Zack builds core app flows and logic
+- Anthony wires automations and integrations
+- Cory manages sprint board + QA process
+- Chea refines positioning and records demo narrative
+
+Deliverables by end of Week 2
+- Working internal MVPs (both)
+- 10 sample scenario outputs each
+- Prioritized fix list
+
+Week 3 (Days 15–21): Pilot + Outreach
+- Run pilots with 5–10 warm prospects per MVP
+- Launch outbound campaign (email/DM) by segment
+- Capture objections, feature gaps, pricing resistance
+- Chea runs calls and closes early pilot accounts
+
+Deliverables by end of Week 3
+- 10–20 prospect conversations
+- 3–5 pilot users
+- Pricing hypothesis v1
+
+Week 4 (Days 22–30): Productize + Scale
+- Tighten onboarding and handoff process
+- Add billing/onboarding docs
+- Build KPI dashboard (leads, demos, close rate, churn risk)
+- Finalize repeatable weekly cadence (idea -> build -> sell)
+
+Deliverables by Day 30
+- 2 packaged offers
+- 1 repeatable outbound campaign
+- Revenue-ready operating loop
+
+Success Metrics (30-day)
+- MVPs launched: 2
+- Pilot users: >=3
+- Sales calls booked: >=10
+- Initial paid conversions: >=1-3
+
+Operating Rules
+- Keep communication short/direct
+- Execution over overplanning
+- Chea owns closing + final ideation decisions
+- Minimize admin overhead
