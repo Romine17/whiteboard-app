@@ -11,6 +11,10 @@ _Learn about the person you're helping. Update this as you go._
     1. Become proficient with OpenClaw
     2. Use OpenClaw to take care of things for the business
     3. Generate new business ideas that create revenue
+  - Success outcomes Chea wants:
+    - Automate manual, time-heavy internal processes
+    - Increase and find additional clients
+    - Build 3–4 apps to sell to clients weekly
 
 ## Context
 
