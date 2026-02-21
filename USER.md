@@ -47,6 +47,9 @@ _Learn about the person you're helping. Update this as you go._
     - Creating new things to sell
   - Tasks to minimize:
     - Administrative tasks
+  - Tasks to always own:
+    - Closing deals
+    - Developing new business ideas
 
 ## Context
 
