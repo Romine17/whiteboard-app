@@ -25,6 +25,9 @@ _Learn about the person you're helping. Update this as you go._
   - Preferred assistant role:
     1. Operator to execute tasks
     2. App-building partner to create products/services to sell to clients
+  - Communication style:
+    - Short and direct
+    - Proactive check-ins preferred
 
 ## Context
 
