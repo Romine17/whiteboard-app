@@ -57,6 +57,14 @@ _Learn about the person you're helping. Update this as you go._
     - Best at: Managing projects after kickoff / execution phase
     - Should not own: Early-stage go/no-go decisions (hesitant at the start)
     - Availability: ~20 hours/week
+    - Strengths:
+      - Adaptable
+      - Realist
+      - Critical thinking
+    - Weaknesses:
+      - Lack of communication depth
+      - Risk-averse
+      - Frugal
   - Partner profile: Zack
     - Core skill set: Software engineering / app development
     - Best at: Coding and technical implementation of apps
