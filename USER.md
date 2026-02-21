@@ -70,6 +70,14 @@ _Learn about the person you're helping. Update this as you go._
     - Best at: Coding and technical implementation of apps
     - Should not own: Sales
     - Availability: ~20 hours/week
+    - Strengths:
+      - Problem solving
+      - Communicates between business and developer contexts (translates business needs)
+      - Builds durable solutions, not temporary fixes
+    - Weaknesses:
+      - Less strong at identifying problems from scratch
+      - Overthinking
+      - Delegation is a growth area
   - Partner profile: Anthony
     - Core skill set: Systems engineering
     - Best at: Tinkering with and improving app systems
