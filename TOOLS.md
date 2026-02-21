@@ -36,7 +36,7 @@ Things like:
 - Zapier email webhook (Chea): https://hooks.zapier.com/hooks/catch/26534236/ucgsjhs/
   - Payload fields: to, subject, body
   - Primary recipient: cromine@rhwcpas.com
-  - Additional approved recipient: ccooper@rhwcpas.com (Cory)
+  - Additional approved recipient: Cc2enterprises@gmail.com (Cory)
 
 ## Why Separate?
 
