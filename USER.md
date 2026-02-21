@@ -45,6 +45,8 @@ _Learn about the person you're helping. Update this as you go._
     - Buying businesses
     - Starting new businesses/projects
     - Creating new things to sell
+  - Tasks to minimize:
+    - Administrative tasks
 
 ## Context
 
