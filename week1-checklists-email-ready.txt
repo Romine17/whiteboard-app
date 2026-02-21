@@ -1,0 +1,116 @@
+Subject: Week 1 Build Checklists (Day 1–7) – AI Product Sprint
+
+Hi team,
+
+Below is the Week 1 execution checklist for our 30-day AI product sprint.
+
+Objectives this week:
+- Lock scope for 2 MVPs:
+  1) Tax Strategy AI Pre-Screen
+  2) SOP/Workflow AI Builder (non-tax)
+- Assign clear ownership by partner strengths
+- Produce demo-ready artifacts for Week 2 build
+
+=====================================
+DAILY PLAN (ALL-TEAM)
+=====================================
+
+Day 1 — Offer Clarity + ICP
+- Finalize one-line promise for both MVPs
+- Define Ideal Customer Profile (ICP) for each
+- Define top 3 pain points per ICP
+- Define success metric per MVP (time saved, lead conversion, etc.)
+
+Day 2 — Scope (Must-Have Only)
+- Decide v1 must-have features only
+- Explicitly cut nice-to-have items
+- Define input/output schema for both products
+- Draft acceptance criteria
+
+Day 3 — Workflow Mapping
+- Map end-to-end user journey for both MVPs
+- Define data handoffs (form → AI → report/task output)
+- Define integration points (CRM/email/calendar)
+- Identify failure points and fallback flows
+
+Day 4 — UX + Prompt + Template Drafting
+- Create intake forms/questions
+- Draft AI prompt frameworks and output templates
+- Create first draft reports/deliverables users receive
+- Build internal QA checklist for output quality
+
+Day 5 — Sales Assets + Demo Prep
+- Write one-page offer sheet per MVP
+- Draft short pitch script (under 2 minutes)
+- Create demo outline and objection handling notes
+- Draft pricing hypothesis (pilot pricing)
+
+Day 6 — Internal Dry Run
+- Run 5 test scenarios per MVP
+- Validate output quality and consistency
+- Log bugs/gaps and prioritize fixes
+- Confirm handoff process for Week 2 build
+
+Day 7 — Freeze Week 1 + Week 2 Build Kickoff
+- Lock v1 specs
+- Lock role ownership and timeline for Week 2
+- Publish final Week 1 summary
+- Final go/no-go check for MVP build sprint
+
+=====================================
+ROLE-BASED CHECKLISTS
+=====================================
+
+Chea (Owner / Sales / Final Decision)
+- Approve one-line offer promise for each MVP
+- Approve ICP definitions and target segment priorities
+- Approve must-have feature set (and what is cut)
+- Approve sales script and CTA language
+- Record quick demo narrative points for each offer
+- Own go/no-go decisions at end of Week 1
+
+Cory (Execution Manager / QA / Risk Lens)
+- Build the week timeline and owner-by-task board
+- Track daily completion and unblock dependencies
+- Maintain decision log + unresolved issues list
+- Run QA checklist definition with Zack/Anthony
+- Flag scope creep and keep v1 tight
+- Publish Week 1 status summary and Week 2 task plan
+
+Zack (Software Build Lead)
+- Define technical architecture for both MVPs
+- Define data model for form inputs and AI outputs
+- Draft API/service requirements and dependencies
+- Build prompt execution pattern and output validators
+- Define core app repo structure + coding plan for Week 2
+- Estimate build effort by module and risk
+
+Anthony (Systems + Automation)
+- Design automation flow (intake → processing → delivery)
+- Plan integrations (CRM/email/calendar/notifications)
+- Define monitoring/logging checks for workflow reliability
+- Draft fallback/exception handling flows
+- Prepare low-friction internal tools for testing runs
+- Document integration checklist for Week 2 execution
+
+=====================================
+DEFINITION OF DONE (END OF WEEK 1)
+=====================================
+- Two signed-off MVP briefs
+- Scope locked (must-have only)
+- Workflow maps complete
+- Intake + output templates drafted
+- Sales one-pagers + demo scripts ready
+- Week 2 build plan assigned by owner
+
+Operating notes:
+- Keep communication short/direct
+- Bias toward execution over discussion
+- Chea owns closing + final ideation decisions
+- Minimize admin overhead
+
+Thanks,
+Chea Romine, CPA
+Managing Partner
+cromine@rhwcpas.com
+https://calendly.com/cromine-rhw/30-min-zoom
