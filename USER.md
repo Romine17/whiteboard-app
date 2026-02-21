@@ -41,6 +41,10 @@ _Learn about the person you're helping. Update this as you go._
     - Motivating people
   - Energy drains:
     - Frequent check-ins and day-to-day workflow management of employees
+  - Energy sources:
+    - Buying businesses
+    - Starting new businesses/projects
+    - Creating new things to sell
 
 ## Context
 
