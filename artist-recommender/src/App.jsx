@@ -1,114 +1,158 @@
 import { useMemo, useState } from 'react'
 import './App.css'
 
-const ARTISTS = [
-  { name: 'Playboi Carti', tags: ['rage', 'experimental', 'adlibs', 'opium', 'hype'] },
-  { name: 'Destroy Lonely', tags: ['opium', 'melodic', 'dark', 'fashion', 'underground'] },
-  { name: 'Ken Carson', tags: ['rage', 'opium', 'hype', 'distorted', 'underground'] },
-  { name: 'Homixide Gang', tags: ['rage', 'opium', 'chaotic', 'hype', 'underground'] },
-  { name: 'Yeat', tags: ['rage', 'distorted', 'experimental', 'hype', 'adlibs'] },
-  { name: 'Lil Uzi Vert', tags: ['melodic', 'experimental', 'hype', 'adlibs', 'mainstream'] },
-  { name: 'SoFaygo', tags: ['melodic', 'rage', 'uplifting', 'hype', 'underground'] },
-  { name: 'Cochise', tags: ['bouncy', 'adlibs', 'hype', 'carti-adjacent', 'experimental'] },
-  { name: 'Lancey Foux', tags: ['fashion', 'experimental', 'dark', 'hype', 'underground'] },
-  { name: 'Trippie Redd', tags: ['melodic', 'rage', 'emotional', 'mainstream', 'experimental'] },
-  { name: 'UnoTheActivist', tags: ['carti-adjacent', 'melodic', 'underground', 'adlibs', 'dark'] },
-  { name: 'Lucki', tags: ['dark', 'melodic', 'laidback', 'underground', 'emotional'] },
-  { name: 'Drake', tags: ['mainstream', 'melodic', 'versatile', 'polished', 'hitmaker'] },
-  { name: 'Travis Scott', tags: ['hype', 'experimental', 'dark', 'mainstream', 'adlibs'] },
-  { name: 'Future', tags: ['melodic', 'dark', 'mainstream', 'adlibs', 'trap'] },
-  { name: 'Don Toliver', tags: ['melodic', 'atmospheric', 'mainstream', 'dark', 'smooth'] },
-]
-
-function scoreArtist(candidate, selected) {
-  const selectedTagPool = new Set(selected.flatMap((a) => a.tags))
-  const sharedTags = candidate.tags.filter((tag) => selectedTagPool.has(tag))
-  const score = sharedTags.length
-  return { score, sharedTags }
-}
+const API = 'https://api.deezer.com'
 
 function App() {
-  const [selectedNames, setSelectedNames] = useState([])
+  const [query, setQuery] = useState('')
+  const [searching, setSearching] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
+  const [selected, setSelected] = useState([])
+  const [loadingRecs, setLoadingRecs] = useState(false)
+  const [recommendations, setRecommendations] = useState([])
+  const [error, setError] = useState('')
 
-  const selectedArtists = useMemo(
-    () => ARTISTS.filter((a) => selectedNames.includes(a.name)),
-    [selectedNames],
-  )
+  const selectedIds = useMemo(() => new Set(selected.map((a) => a.id)), [selected])
 
-  const recommendations = useMemo(() => {
-    if (selectedArtists.length < 3) return []
+  async function searchArtists(e) {
+    e?.preventDefault()
+    if (!query.trim()) return
+    setSearching(true)
+    setError('')
 
-    return ARTISTS.filter((artist) => !selectedNames.includes(artist.name))
-      .map((artist) => {
-        const { score, sharedTags } = scoreArtist(artist, selectedArtists)
-        return {
-          ...artist,
-          score,
-          sharedTags,
-          reason:
-            sharedTags.length > 0
-              ? `Similar because of: ${sharedTags.slice(0, 3).join(', ')}`
-              : 'Wildcard pick for discovery',
-        }
+    try {
+      const res = await fetch(`${API}/search/artist?q=${encodeURIComponent(query.trim())}&limit=10`)
+      const data = await res.json()
+      setSearchResults(data.data || [])
+    } catch {
+      setError('Could not search artists right now.')
+    } finally {
+      setSearching(false)
+    }
+  }
+
+  function addArtist(artist) {
+    if (selectedIds.has(artist.id)) return
+    if (selected.length >= 3) return
+    setSelected((prev) => [...prev, artist])
+  }
+
+  function removeArtist(id) {
+    setSelected((prev) => prev.filter((a) => a.id !== id))
+  }
+
+  async function generateRecommendations() {
+    if (selected.length === 0) return
+    setLoadingRecs(true)
+    setError('')
+
+    try {
+      const relatedResponses = await Promise.all(
+        selected.map((artist) => fetch(`${API}/artist/${artist.id}/related?limit=25`).then((r) => r.json())),
+      )
+
+      const map = new Map()
+      relatedResponses.forEach((payload, idx) => {
+        const source = selected[idx]
+        ;(payload.data || []).forEach((candidate) => {
+          if (selectedIds.has(candidate.id)) return
+          const prev = map.get(candidate.id) || {
+            ...candidate,
+            score: 0,
+            reasons: [],
+          }
+          prev.score += 1
+          prev.reasons.push(source.name)
+          map.set(candidate.id, prev)
+        })
       })
-      .filter((artist) => artist.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 8)
-  }, [selectedArtists, selectedNames])
 
-  function toggleArtist(name) {
-    setSelectedNames((prev) => {
-      if (prev.includes(name)) return prev.filter((a) => a !== name)
-      if (prev.length >= 3) return prev
-      return [...prev, name]
-    })
+      const ranked = [...map.values()]
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 15)
+        .map((artist) => ({
+          ...artist,
+          why:
+            artist.reasons.length >= 2
+              ? `Similar to ${artist.reasons.slice(0, 2).join(' and ')}.`
+              : `Similar to ${artist.reasons[0]}.`,
+        }))
+
+      setRecommendations(ranked)
+    } catch {
+      setError('Could not load recommendations right now.')
+    } finally {
+      setLoadingRecs(false)
+    }
   }
 
   return (
     <div className="app">
-      <h1>Artist Similarity Recommender</h1>
-      <p>Select exactly 3 artists you like, then get ranked recommendations + why.</p>
+      <h1>Artist Recommender</h1>
+      <p>Search any artist, select up to 3, then get similar artist recommendations.</p>
 
       <section className="panel">
-        <h2>Choose 3 artists</h2>
-        <div className="chips">
-          {ARTISTS.map((artist) => {
-            const active = selectedNames.includes(artist.name)
-            const disabled = !active && selectedNames.length >= 3
-            return (
-              <button
-                key={artist.name}
-                className={`chip ${active ? 'active' : ''}`}
-                onClick={() => toggleArtist(artist.name)}
-                disabled={disabled}
-              >
-                {artist.name}
+        <h2>1) Search artists</h2>
+        <form className="searchRow" onSubmit={searchArtists}>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search any artist (e.g., Playboi Carti)"
+          />
+          <button type="submit" disabled={searching}>
+            {searching ? 'Searching...' : 'Search'}
+          </button>
+        </form>
+
+        <div className="selectedRow">
+          <strong>Selected ({selected.length}/3):</strong>
+          <div className="chips">
+            {selected.map((artist) => (
+              <button key={artist.id} className="chip active" onClick={() => removeArtist(artist.id)}>
+                {artist.name} ✕
               </button>
-            )
-          })}
+            ))}
+          </div>
         </div>
-        <p className="helper">Selected: {selectedNames.length}/3</p>
+
+        <ul className="results">
+          {searchResults.map((artist) => (
+            <li key={artist.id}>
+              <span>{artist.name}</span>
+              <button disabled={selected.length >= 3 || selectedIds.has(artist.id)} onClick={() => addArtist(artist)}>
+                Add
+              </button>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="panel">
-        <h2>Recommendations</h2>
-        {selectedNames.length < 3 ? (
-          <p>Select 3 artists to generate recommendations.</p>
-        ) : (
-          <ul className="results">
-            {recommendations.map((artist, idx) => (
-              <li key={artist.name}>
-                <div>
-                  <strong>
-                    #{idx + 1} {artist.name}
-                  </strong>
-                  <p>{artist.reason}</p>
-                </div>
+        <h2>2) Recommendations</h2>
+        <button onClick={generateRecommendations} disabled={loadingRecs || selected.length === 0}>
+          {loadingRecs ? 'Loading...' : 'Get recommendations'}
+        </button>
+
+        {error && <p className="error">{error}</p>}
+
+        <ul className="recommendations">
+          {recommendations.map((artist, idx) => (
+            <li key={artist.id}>
+              <div>
+                <strong>
+                  #{idx + 1} {artist.name}
+                </strong>
+                <p>{artist.why}</p>
+              </div>
+              <div className="actions">
                 <span className="score">Match {artist.score}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+                <a href={artist.link} target="_blank" rel="noreferrer">
+                  Open music ↗
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   )
