@@ -169,6 +169,8 @@ function App() {
   const [draggedId, setDraggedId] = useState(null)
   const [assigneeFilter, setAssigneeFilter] = useState('All')
   const [myTasksFor, setMyTasksFor] = useState('Chea')
+  const [editingIdeaId, setEditingIdeaId] = useState(null)
+  const [editDraft, setEditDraft] = useState({ title: '', notes: '', column: 'Do Next' })
 
   useEffect(() => {
     if (!hasSupabase) {
@@ -302,6 +304,27 @@ function App() {
     updateIdea(id, (idea) => ({ ...idea, column: 'Do Now' }))
   }
 
+  function startEditing(idea) {
+    setEditingIdeaId(idea.id)
+    setEditDraft({ title: idea.title, notes: idea.notes || '', column: idea.column })
+  }
+
+  function cancelEditing() {
+    setEditingIdeaId(null)
+    setEditDraft({ title: '', notes: '', column: 'Do Next' })
+  }
+
+  async function saveEditing(id) {
+    if (!editDraft.title.trim()) return
+    await updateIdea(id, (idea) => ({
+      ...idea,
+      title: editDraft.title.trim(),
+      notes: editDraft.notes.trim(),
+      column: editDraft.column,
+    }))
+    cancelEditing()
+  }
+
   const leaderboard = [...ideas]
     .map((idea) => ({ ...idea, score: priorityScore(idea) }))
     .sort((a, b) => b.score - a.score)
@@ -384,49 +407,96 @@ function App() {
             onDrop={() => onDropColumn(column)}
           >
             <h2>{column}</h2>
-            {groupedIdeas[column].map((idea) => (
-              <article
-                key={idea.id}
-                className="card"
-                draggable
-                onDragStart={() => setDraggedId(idea.id)}
-              >
-                <h3>{idea.title}</h3>
-                {idea.notes && <p>{idea.notes}</p>}
-                <p className="score">Score: {priorityScore(idea).toFixed(2)}</p>
-                <p className="assignee">Assigned: {idea.owner || 'Unassigned'}</p>
+            {groupedIdeas[column].map((idea) => {
+              const isEditing = editingIdeaId === idea.id
 
-                <div className="meta">
-                  <button onClick={() => updateIdea(idea.id, (i) => ({ ...i, votes: i.votes + 1 }))}>
-                    👍 Vote ({idea.votes})
-                  </button>
-                  <button onClick={() => promoteToTask(idea.id)}>Promote to Do Now</button>
-                </div>
+              return (
+                <article
+                  key={idea.id}
+                  className="card"
+                  draggable={!isEditing}
+                  onDragStart={() => setDraggedId(idea.id)}
+                >
+                  {isEditing ? (
+                    <>
+                      <input
+                        value={editDraft.title}
+                        onChange={(e) => setEditDraft((draft) => ({ ...draft, title: e.target.value }))}
+                        placeholder="Task title"
+                      />
+                      <textarea
+                        value={editDraft.notes}
+                        onChange={(e) => setEditDraft((draft) => ({ ...draft, notes: e.target.value }))}
+                        placeholder="Task notes"
+                        rows={3}
+                      />
+                      <select
+                        value={editDraft.column}
+                        onChange={(e) => setEditDraft((draft) => ({ ...draft, column: e.target.value }))}
+                      >
+                        {COLUMNS.map((col) => (
+                          <option key={col} value={col}>
+                            {col}
+                          </option>
+                        ))}
+                      </select>
+                    </>
+                  ) : (
+                    <>
+                      <h3>{idea.title}</h3>
+                      {idea.notes && <p>{idea.notes}</p>}
+                    </>
+                  )}
 
-                <div className="task-fields">
-                  <select
-                    value={idea.owner || 'Unassigned'}
-                    onChange={(e) =>
-                      updateIdea(idea.id, (i) => ({
-                        ...i,
-                        owner: e.target.value === 'Unassigned' ? '' : e.target.value,
-                      }))
-                    }
-                  >
-                    {TEAM_MEMBERS.map((member) => (
-                      <option key={member.name} value={member.name}>
-                        {member.email ? `${member.name} (${member.email})` : member.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="date"
-                    value={idea.dueDate}
-                    onChange={(e) => updateIdea(idea.id, (i) => ({ ...i, dueDate: e.target.value }))}
-                  />
-                </div>
-              </article>
-            ))}
+                  <p className="score">Score: {priorityScore(idea).toFixed(2)}</p>
+                  <p className="assignee">Assigned: {idea.owner || 'Unassigned'}</p>
+
+                  <div className="meta">
+                    {isEditing ? (
+                      <>
+                        <button onClick={() => saveEditing(idea.id)}>Save</button>
+                        <button className="secondary" onClick={cancelEditing}>
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => updateIdea(idea.id, (i) => ({ ...i, votes: i.votes + 1 }))}>
+                          👍 Vote ({idea.votes})
+                        </button>
+                        <button onClick={() => promoteToTask(idea.id)}>Promote to Do Now</button>
+                        <button className="secondary" onClick={() => startEditing(idea)}>
+                          Edit
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="task-fields">
+                    <select
+                      value={idea.owner || 'Unassigned'}
+                      onChange={(e) =>
+                        updateIdea(idea.id, (i) => ({
+                          ...i,
+                          owner: e.target.value === 'Unassigned' ? '' : e.target.value,
+                        }))
+                      }
+                    >
+                      {TEAM_MEMBERS.map((member) => (
+                        <option key={member.name} value={member.name}>
+                          {member.email ? `${member.name} (${member.email})` : member.name}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="date"
+                      value={idea.dueDate}
+                      onChange={(e) => updateIdea(idea.id, (i) => ({ ...i, dueDate: e.target.value }))}
+                    />
+                  </div>
+                </article>
+              )
+            })}
           </div>
         ))}
       </main>

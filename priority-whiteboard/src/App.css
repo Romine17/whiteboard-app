@@ -44,6 +44,7 @@ label {
 
 input,
 select,
+textarea,
 button {
   width: 100%;
   border: 1px solid #d0d5dd;
@@ -58,6 +59,12 @@ button {
   background: #175cd3;
   color: #fff;
   border: none;
+}
+
+button.secondary {
+  background: #f2f4f7;
+  color: #344054;
+  border: 1px solid #d0d5dd;
 }
 
 .board {
@@ -94,6 +101,11 @@ button {
 
 .card p {
   margin: 0.2rem 0;
+}
+
+.card textarea {
+  resize: vertical;
+  margin-top: 0.35rem;
 }
 
 .score {
