@@ -50,6 +50,12 @@ create policy "ideas_delete_all" on public.ideas for delete using (true);
 -- Seed rows
 insert into public.ideas (title, notes, column_name, impact, revenue, urgency, confidence, effort)
 values
-('Automate client onboarding packet', 'Forms + e-sign + CRM handoff', 'Do Now', 5,4,5,4,2),
-('Build tax-savings lead magnet quiz', 'Capture W-2 and owner leads', 'Do Next', 4,5,3,3,3)
+('AI phone answering with calendar scheduling', 'Answer calls, qualify lead/client need, and book directly on calendar.', 'Do Now', 5,5,5,4,3),
+('Upload bank/credit card statements and auto-post to QuickBooks', 'Auto-categorize transactions and generate entries with review queue.', 'Do Now', 5,5,4,4,4),
+('Extract W-2/1099 data and enter into UltraTax', 'Document intake + structured extraction + prefill workflow.', 'Do Now', 5,4,4,3,4),
+('Search master Excel list and add custom fields into GoFileRoom', 'Fields: tax preparer, staff preparer, entity type, tax software.', 'Do Now', 4,4,4,4,3),
+('Check UltraTax for events and move project along in GoFileRoom', 'Event-triggered workflow automation between UltraTax and GFR.', 'Do Next', 4,4,4,3,3),
+('Sort emails automatically', 'Route by urgency/type/owner and create follow-up tasks where needed.', 'Do Next', 4,3,4,4,2),
+('Monthly podcast/business article digest to client list', 'Curate content and email by segment each month.', 'Do Next', 3,3,2,4,2),
+('Build social media for brand', 'Content pipeline, posting cadence, and lead capture hooks.', 'Later', 3,3,2,3,3)
 on conflict do nothing;
