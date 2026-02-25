@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { hasSupabase, supabase } from './supabase'
 
-const COLUMNS = ['Do Now', 'Do Next', 'Later']
+const COLUMNS = ['Do Now', 'Do Next', 'Later', 'Done']
 const SCORE_WEIGHTS = {
   impact: 0.35,
   revenue: 0.3,
@@ -395,6 +395,19 @@ function App() {
     }
   }
 
+  async function deleteIdea(id) {
+    if (!window.confirm('Delete this task?')) return
+
+    if (hasSupabase) {
+      const { error } = await supabase.from('ideas').delete().eq('id', id)
+      if (error) return setStatus(`Delete failed: ${error.message}`)
+    } else {
+      setIdeas((prev) => prev.filter((idea) => idea.id !== id))
+    }
+
+    if (editingIdeaId === id) cancelEditing()
+  }
+
   function onDropColumn(column) {
     if (!draggedId) return
     updateIdea(draggedId, (idea) => ({ ...idea, column }))
@@ -566,8 +579,14 @@ function App() {
                           👍 Vote ({idea.votes})
                         </button>
                         <button onClick={() => promoteToTask(idea.id)}>Promote to Do Now</button>
+                        <button onClick={() => updateIdea(idea.id, (i) => ({ ...i, column: 'Done' }))}>
+                          Mark complete
+                        </button>
                         <button className="secondary" onClick={() => startEditing(idea)}>
                           Edit
+                        </button>
+                        <button className="danger" onClick={() => deleteIdea(idea.id)}>
+                          Delete
                         </button>
                       </>
                     )}

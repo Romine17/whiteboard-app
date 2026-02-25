@@ -67,6 +67,11 @@ button.secondary {
   border: 1px solid #d0d5dd;
 }
 
+button.danger {
+  background: #d92d20;
+  color: #fff;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(3, minmax(180px, 1fr));
@@ -120,6 +125,7 @@ button.secondary {
 
 .meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
 }
 
