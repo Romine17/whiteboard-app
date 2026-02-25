@@ -32,8 +32,18 @@ header p {
 .composer form {
   display: grid;
   gap: 0.6rem;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: 2fr 2fr 1fr auto;
   align-items: center;
+}
+
+.composer-bottom h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.composer-bottom button[type='submit'] {
+  width: auto;
+  padding: 0.45rem 0.8rem;
 }
 
 .template-row {
@@ -293,6 +303,10 @@ button.danger {
 
 @media (max-width: 900px) {
   .board {
+    grid-template-columns: 1fr;
+  }
+
+  .composer form {
     grid-template-columns: 1fr;
   }
 }

@@ -3,13 +3,6 @@ import './App.css'
 import { hasSupabase, supabase } from './supabase'
 
 const COLUMNS = ['Do Now', 'Do Next', 'Later', 'Done']
-const SCORE_WEIGHTS = {
-  impact: 0.35,
-  revenue: 0.3,
-  urgency: 0.2,
-  confidence: 0.15,
-  effortPenalty: 0.25,
-}
 
 const TEAM_MEMBERS = [
   { name: 'Unassigned', email: '' },
@@ -263,18 +256,6 @@ function ideaToRow(idea) {
   }
 }
 
-function priorityScore(idea) {
-  const { impact, revenue, urgency, confidence, effort } = idea.metrics
-  return (
-    impact * SCORE_WEIGHTS.impact +
-    revenue * SCORE_WEIGHTS.revenue +
-    urgency * SCORE_WEIGHTS.urgency +
-    confidence * SCORE_WEIGHTS.confidence -
-    effort * SCORE_WEIGHTS.effortPenalty +
-    idea.votes * 0.4
-  )
-}
-
 function defaultTaskMeta() {
   return {
     blocked: false,
@@ -284,6 +265,9 @@ function defaultTaskMeta() {
     revenueImpact: 0,
     timeSavings: 0,
     riskReduction: 0,
+    clientName: '',
+    valuePropAmount: '',
+    chargeAmount: '',
     activity: [],
   }
 }
@@ -305,7 +289,6 @@ function App() {
     title: '',
     notes: '',
     column: 'Do Next',
-    metrics: { impact: 3, revenue: 3, urgency: 3, confidence: 3, effort: 3 },
   })
 
   const [draggedId, setDraggedId] = useState(null)
@@ -390,15 +373,16 @@ function App() {
   const groupedIdeas = useMemo(() => {
     const grouped = Object.fromEntries(COLUMNS.map((column) => [column, []]))
     ideas
-      .map((idea) => ({ ...idea, score: priorityScore(idea) }))
       .filter((idea) => assigneeFilter === 'All' || (idea.owner || 'Unassigned') === assigneeFilter)
-      .sort((a, b) => b.score - a.score)
       .forEach((idea) => grouped[idea.column].push(idea))
     return grouped
   }, [ideas, assigneeFilter])
 
   const myTasks = useMemo(
-    () => ideas.filter((idea) => idea.owner === myTasksFor).sort((a, b) => priorityScore(b) - priorityScore(a)),
+    () =>
+      ideas
+        .filter((idea) => idea.owner === myTasksFor)
+        .sort((a, b) => (a.dueDate || '9999-12-31').localeCompare(b.dueDate || '9999-12-31')),
     [ideas, myTasksFor],
   )
 
@@ -446,7 +430,7 @@ function App() {
       votes: 0,
       owner: '',
       dueDate: '',
-      metrics: newIdea.metrics,
+      metrics: { impact: 3, revenue: 3, urgency: 3, confidence: 3, effort: 3 },
     }
 
     if (hasSupabase) {
@@ -460,7 +444,6 @@ function App() {
       title: '',
       notes: '',
       column: 'Do Next',
-      metrics: { impact: 3, revenue: 3, urgency: 3, confidence: 3, effort: 3 },
     })
   }
 
@@ -711,11 +694,6 @@ function App() {
     await navigator.clipboard.writeText(summaryText)
   }
 
-  const leaderboard = [...ideas]
-    .map((idea) => ({ ...idea, score: priorityScore(idea) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 5)
-
   return (
     <div className="app">
       <header>
@@ -737,63 +715,6 @@ function App() {
           </select>
         </label>
         <p className="status">Sprint lock: {lockedDoNowIds.length}/{MAX_LOCKED_DO_NOW} Do Now tasks locked</p>
-      </section>
-
-      <section className="composer">
-        <form onSubmit={addIdea}>
-          <input
-            value={newIdea.title}
-            onChange={(e) => setNewIdea((p) => ({ ...p, title: e.target.value }))}
-            placeholder="Idea title"
-          />
-          <input
-            value={newIdea.notes}
-            onChange={(e) => setNewIdea((p) => ({ ...p, notes: e.target.value }))}
-            placeholder="Notes / context"
-          />
-          <select
-            value={newIdea.column}
-            onChange={(e) => setNewIdea((p) => ({ ...p, column: e.target.value }))}
-          >
-            {COLUMNS.map((column) => (
-              <option key={column} value={column}>
-                {column}
-              </option>
-            ))}
-          </select>
-
-          {Object.keys(newIdea.metrics).map((metric) => (
-            <label key={metric}>
-              {metric}
-              <input
-                type="range"
-                min="1"
-                max="5"
-                value={newIdea.metrics[metric]}
-                onChange={(e) =>
-                  setNewIdea((p) => ({
-                    ...p,
-                    metrics: { ...p.metrics, [metric]: Number(e.target.value) },
-                  }))
-                }
-              />
-              <span>{newIdea.metrics[metric]}</span>
-            </label>
-          ))}
-
-          <button type="submit">Add idea</button>
-        </form>
-
-        <div className="template-row">
-          <select value={selectedTemplate} onChange={(e) => setSelectedTemplate(e.target.value)}>
-            {TASK_TEMPLATES.map((template) => (
-              <option key={template.name} value={template.name}>
-                Template: {template.name}
-              </option>
-            ))}
-          </select>
-          <button onClick={addTemplateIdea}>Add from template</button>
-        </div>
       </section>
 
       <main className="board">
@@ -849,7 +770,6 @@ function App() {
                     </>
                   )}
 
-                  <p className="score">Score: {priorityScore(idea).toFixed(2)}</p>
                   <p className="assignee">Assigned: {idea.owner || 'Unassigned'}</p>
                   <p className={isReadyForDoNow(idea) ? 'ready ready-yes' : 'ready ready-no'}>
                     {isReadyForDoNow(idea) ? 'Ready for Do Now' : 'Not Ready for Do Now'}
@@ -907,6 +827,36 @@ function App() {
                     />
                   </div>
 
+                  <div className="task-fields task-fields-3">
+                    <input
+                      value={meta.clientName}
+                      onChange={(e) =>
+                        updateTaskMeta(idea.id, (current) => ({ ...current, clientName: e.target.value }))
+                      }
+                      placeholder="Client name"
+                    />
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={meta.valuePropAmount}
+                      onChange={(e) =>
+                        updateTaskMeta(idea.id, (current) => ({ ...current, valuePropAmount: e.target.value }))
+                      }
+                      placeholder="Value prop ($)"
+                    />
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={meta.chargeAmount}
+                      onChange={(e) =>
+                        updateTaskMeta(idea.id, (current) => ({ ...current, chargeAmount: e.target.value }))
+                      }
+                      placeholder="Charge amount ($)"
+                    />
+                  </div>
+
                   <div className="task-fields">
                     <label>
                       <input
@@ -938,7 +888,7 @@ function App() {
                     />
                   </div>
 
-                  <div className="task-fields task-fields-3">
+                  <div className="task-fields">
                     <label>
                       Est. hours
                       <input
@@ -954,58 +904,6 @@ function App() {
                         }
                       />
                     </label>
-                    <label>
-                      Revenue impact (1-5)
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        value={meta.revenueImpact}
-                        onChange={(e) =>
-                          updateTaskMeta(idea.id, (current) => ({
-                            ...current,
-                            revenueImpact: Number(e.target.value || 0),
-                          }))
-                        }
-                      />
-                    </label>
-                    <label>
-                      Time savings (1-5)
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        value={meta.timeSavings}
-                        onChange={(e) =>
-                          updateTaskMeta(idea.id, (current) => ({
-                            ...current,
-                            timeSavings: Number(e.target.value || 0),
-                          }))
-                        }
-                      />
-                    </label>
-                  </div>
-
-                  <div className="task-fields">
-                    <label>
-                      Risk reduction (1-5)
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        value={meta.riskReduction}
-                        onChange={(e) =>
-                          updateTaskMeta(idea.id, (current) => ({
-                            ...current,
-                            riskReduction: Number(e.target.value || 0),
-                          }))
-                        }
-                      />
-                    </label>
-                    <p className="impact-score">
-                      Biz impact score:{' '}
-                      {((meta.revenueImpact + meta.timeSavings + meta.riskReduction) / 3 || 0).toFixed(2)}
-                    </p>
                   </div>
 
                   <div className="checklist">
@@ -1083,6 +981,41 @@ function App() {
         ))}
       </main>
 
+      <section className="composer composer-bottom">
+        <h2>Add Task</h2>
+        <form onSubmit={addIdea}>
+          <input
+            value={newIdea.title}
+            onChange={(e) => setNewIdea((p) => ({ ...p, title: e.target.value }))}
+            placeholder="Task title"
+          />
+          <input
+            value={newIdea.notes}
+            onChange={(e) => setNewIdea((p) => ({ ...p, notes: e.target.value }))}
+            placeholder="Notes"
+          />
+          <select value={newIdea.column} onChange={(e) => setNewIdea((p) => ({ ...p, column: e.target.value }))}>
+            {COLUMNS.map((column) => (
+              <option key={column} value={column}>
+                {column}
+              </option>
+            ))}
+          </select>
+          <button type="submit">Add task</button>
+        </form>
+
+        <div className="template-row">
+          <select value={selectedTemplate} onChange={(e) => setSelectedTemplate(e.target.value)}>
+            {TASK_TEMPLATES.map((template) => (
+              <option key={template.name} value={template.name}>
+                Template: {template.name}
+              </option>
+            ))}
+          </select>
+          <button onClick={addTemplateIdea}>Add from template</button>
+        </div>
+      </section>
+
       <section className="my-tasks">
         <h2>My Tasks View</h2>
         <label>
@@ -1117,17 +1050,6 @@ function App() {
               </li>
             ))}
         </ul>
-      </section>
-
-      <section className="leaderboard">
-        <h2>Top 5 by priority score</h2>
-        <ol>
-          {leaderboard.map((idea) => (
-            <li key={idea.id}>
-              {idea.title} — {idea.score.toFixed(2)}
-            </li>
-          ))}
-        </ol>
       </section>
 
       <section className="weekly-summary">
