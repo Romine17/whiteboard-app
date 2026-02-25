@@ -679,7 +679,7 @@ function App() {
       `Blocked: ${blocked.length}`,
       ...blocked.slice(0, 8).map((idea) => {
         const meta = getTaskMeta(idea.id)
-        return `- ${idea.title}${meta.dependencies ? ` — blocked by: ${meta.dependencies}` : ''}`
+        return `- ${idea.title}${meta.dependencies ? ` — software needed: ${meta.dependencies}` : ''}`
       }),
       '',
       `Overdue: ${overdue.length}`,
@@ -775,7 +775,7 @@ function App() {
                     {isReadyForDoNow(idea) ? 'Ready for Do Now' : 'Not Ready for Do Now'}
                   </p>
                   {meta.blocked && <p className="blocked">Blocked</p>}
-                  {meta.dependencies && <p className="deps">Depends on: {meta.dependencies}</p>}
+                  {meta.dependencies && <p className="deps">Software needed: {meta.dependencies}</p>}
 
                   <div className="meta">
                     {isEditing ? (
@@ -881,10 +881,10 @@ function App() {
                         updateTaskMeta(
                           idea.id,
                           (current) => ({ ...current, dependencies: e.target.value }),
-                          `Updated dependencies: ${e.target.value || 'None'}`,
+                          `Updated software needed: ${e.target.value || 'None'}`,
                         )
                       }
-                      placeholder="Dependencies"
+                      placeholder="Software needed"
                     />
                   </div>
 
