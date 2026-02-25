@@ -280,6 +280,11 @@ function defaultTaskMeta() {
     blocked: false,
     dependencies: '',
     subtasks: [],
+    effortHours: 0,
+    revenueImpact: 0,
+    timeSavings: 0,
+    riskReduction: 0,
+    activity: [],
   }
 }
 
@@ -397,6 +402,17 @@ function App() {
     [ideas, myTasksFor],
   )
 
+  const capacityByOwner = useMemo(() => {
+    const totals = {}
+    ideas
+      .filter((idea) => idea.column !== 'Done' && idea.owner)
+      .forEach((idea) => {
+        const hrs = Number(getTaskMeta(idea.id).effortHours || 0)
+        totals[idea.owner] = (totals[idea.owner] || 0) + hrs
+      })
+    return totals
+  }, [ideas, taskMeta])
+
   useEffect(() => {
     const doNowIds = new Set(ideas.filter((idea) => idea.column === 'Do Now').map((idea) => idea.id))
     setLockedDoNowIds((prev) => prev.filter((id) => doNowIds.has(id)))
@@ -473,9 +489,15 @@ function App() {
     setTaskMeta((prev) => ({
       ...prev,
       [idea.id]: {
-        blocked: false,
-        dependencies: '',
+        ...defaultTaskMeta(),
         subtasks: template.subtasks.map((text) => ({ id: crypto.randomUUID(), text, done: false })),
+        activity: [
+          {
+            id: crypto.randomUUID(),
+            text: `Task created from template: ${template.name}`,
+            at: new Date().toISOString(),
+          },
+        ],
       },
     }))
   }
@@ -618,12 +640,26 @@ function App() {
     return taskMeta[id] || defaultTaskMeta()
   }
 
-  function updateTaskMeta(id, updateFn) {
+  function logTaskActivity(meta, text) {
+    return {
+      ...meta,
+      activity: [{ id: crypto.randomUUID(), text, at: new Date().toISOString() }, ...(meta.activity || [])].slice(
+        0,
+        25,
+      ),
+    }
+  }
+
+  function updateTaskMeta(id, updateFn, activityText = '') {
     setTaskMeta((prev) => {
       const current = prev[id] || defaultTaskMeta()
+      let updated = updateFn(current)
+      if (activityText) {
+        updated = logTaskActivity(updated, activityText)
+      }
       return {
         ...prev,
-        [id]: updateFn(current),
+        [id]: updated,
       }
     })
   }
@@ -632,10 +668,14 @@ function App() {
     const trimmed = text.trim()
     if (!trimmed) return
 
-    updateTaskMeta(id, (meta) => ({
-      ...meta,
-      subtasks: [...meta.subtasks, { id: crypto.randomUUID(), text: trimmed, done: false }],
-    }))
+    updateTaskMeta(
+      id,
+      (meta) => ({
+        ...meta,
+        subtasks: [...meta.subtasks, { id: crypto.randomUUID(), text: trimmed, done: false }],
+      }),
+      `Added checklist item: ${trimmed}`,
+    )
   }
 
   function generateWeeklySummary() {
@@ -873,7 +913,11 @@ function App() {
                         type="checkbox"
                         checked={meta.blocked}
                         onChange={(e) =>
-                          updateTaskMeta(idea.id, (current) => ({ ...current, blocked: e.target.checked }))
+                          updateTaskMeta(
+                            idea.id,
+                            (current) => ({ ...current, blocked: e.target.checked }),
+                            e.target.checked ? 'Marked blocked' : 'Marked unblocked',
+                          )
                         }
                       />
                       Blocked
@@ -883,8 +927,85 @@ function App() {
                       onChange={(e) =>
                         updateTaskMeta(idea.id, (current) => ({ ...current, dependencies: e.target.value }))
                       }
+                      onBlur={(e) =>
+                        updateTaskMeta(
+                          idea.id,
+                          (current) => ({ ...current, dependencies: e.target.value }),
+                          `Updated dependencies: ${e.target.value || 'None'}`,
+                        )
+                      }
                       placeholder="Dependencies"
                     />
+                  </div>
+
+                  <div className="task-fields task-fields-3">
+                    <label>
+                      Est. hours
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={meta.effortHours}
+                        onChange={(e) =>
+                          updateTaskMeta(idea.id, (current) => ({
+                            ...current,
+                            effortHours: Number(e.target.value || 0),
+                          }))
+                        }
+                      />
+                    </label>
+                    <label>
+                      Revenue impact (1-5)
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        value={meta.revenueImpact}
+                        onChange={(e) =>
+                          updateTaskMeta(idea.id, (current) => ({
+                            ...current,
+                            revenueImpact: Number(e.target.value || 0),
+                          }))
+                        }
+                      />
+                    </label>
+                    <label>
+                      Time savings (1-5)
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        value={meta.timeSavings}
+                        onChange={(e) =>
+                          updateTaskMeta(idea.id, (current) => ({
+                            ...current,
+                            timeSavings: Number(e.target.value || 0),
+                          }))
+                        }
+                      />
+                    </label>
+                  </div>
+
+                  <div className="task-fields">
+                    <label>
+                      Risk reduction (1-5)
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        value={meta.riskReduction}
+                        onChange={(e) =>
+                          updateTaskMeta(idea.id, (current) => ({
+                            ...current,
+                            riskReduction: Number(e.target.value || 0),
+                          }))
+                        }
+                      />
+                    </label>
+                    <p className="impact-score">
+                      Biz impact score:{' '}
+                      {((meta.revenueImpact + meta.timeSavings + meta.riskReduction) / 3 || 0).toFixed(2)}
+                    </p>
                   </div>
 
                   <div className="checklist">
@@ -898,12 +1019,16 @@ function App() {
                             type="checkbox"
                             checked={task.done}
                             onChange={() =>
-                              updateTaskMeta(idea.id, (current) => ({
-                                ...current,
-                                subtasks: current.subtasks.map((subtask) =>
-                                  subtask.id === task.id ? { ...subtask, done: !subtask.done } : subtask,
-                                ),
-                              }))
+                              updateTaskMeta(
+                                idea.id,
+                                (current) => ({
+                                  ...current,
+                                  subtasks: current.subtasks.map((subtask) =>
+                                    subtask.id === task.id ? { ...subtask, done: !subtask.done } : subtask,
+                                  ),
+                                }),
+                                `${task.done ? 'Unchecked' : 'Checked'}: ${task.text}`,
+                              )
                             }
                           />
                           <span className={task.done ? 'done' : ''}>{task.text}</span>
@@ -911,10 +1036,14 @@ function App() {
                         <button
                           className="secondary"
                           onClick={() =>
-                            updateTaskMeta(idea.id, (current) => ({
-                              ...current,
-                              subtasks: current.subtasks.filter((subtask) => subtask.id !== task.id),
-                            }))
+                            updateTaskMeta(
+                              idea.id,
+                              (current) => ({
+                                ...current,
+                                subtasks: current.subtasks.filter((subtask) => subtask.id !== task.id),
+                              }),
+                              `Removed checklist item: ${task.text}`,
+                            )
                           }
                         >
                           Remove
@@ -934,6 +1063,18 @@ function App() {
                       />
                       <small>Press Enter to add</small>
                     </div>
+                  </div>
+
+                  <div className="activity-log">
+                    <p>Recent activity</p>
+                    <ul>
+                      {(meta.activity || []).slice(0, 5).map((entry) => (
+                        <li key={entry.id}>
+                          {entry.text} — {new Date(entry.at).toLocaleString()}
+                        </li>
+                      ))}
+                      {(meta.activity || []).length === 0 && <li>No activity yet.</li>}
+                    </ul>
                   </div>
                 </article>
               )
@@ -961,6 +1102,20 @@ function App() {
               {task.title} — {task.column} — due {task.dueDate || 'TBD'}
             </li>
           ))}
+        </ul>
+      </section>
+
+      <section className="capacity-view">
+        <h2>Capacity View (estimated active hours)</h2>
+        <ul>
+          {Object.keys(capacityByOwner).length === 0 && <li>No estimated hours entered yet.</li>}
+          {Object.entries(capacityByOwner)
+            .sort((a, b) => b[1] - a[1])
+            .map(([owner, hours]) => (
+              <li key={owner}>
+                {owner}: {hours} hrs
+              </li>
+            ))}
         </ul>
       </section>
 

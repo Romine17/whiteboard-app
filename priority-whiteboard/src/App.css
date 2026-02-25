@@ -166,6 +166,10 @@ button.danger {
   margin-top: 0.45rem;
 }
 
+.task-fields-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .task-fields label {
   display: flex;
   align-items: center;
@@ -238,11 +242,41 @@ button.danger {
   color: #667085;
 }
 
+.impact-score {
+  align-self: end;
+  font-size: 0.82rem;
+  color: #344054;
+  font-weight: 600;
+}
+
+.activity-log {
+  margin-top: 0.45rem;
+  border-top: 1px dashed #d0d5dd;
+  padding-top: 0.4rem;
+}
+
+.activity-log p {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.activity-log ul {
+  margin: 0.2rem 0 0;
+  padding-left: 1rem;
+}
+
+.activity-log li {
+  font-size: 0.75rem;
+  color: #475467;
+  margin: 0.1rem 0;
+}
+
 .weekly-summary textarea {
   margin-top: 0.6rem;
 }
 
 .my-tasks,
+.capacity-view,
 .leaderboard,
 .weekly-summary {
   margin-top: 1rem;
