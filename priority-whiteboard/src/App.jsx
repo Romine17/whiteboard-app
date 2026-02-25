@@ -157,6 +157,39 @@ const localSeedIdeas = [
     dueDate: '',
     metrics: { impact: 2, revenue: 2, urgency: 2, confidence: 2, effort: 4 },
   },
+  {
+    id: crypto.randomUUID(),
+    title: 'Vendor Sourcing & Quoting Agent',
+    notes:
+      'AI agent sources paper, envelopes, ink, and consumables across vendors. Compares pricing, lead times, alternates, and generates RFQs/POs.',
+    column: 'Do Now',
+    votes: 0,
+    owner: '',
+    dueDate: '',
+    metrics: { impact: 5, revenue: 4, urgency: 4, confidence: 4, effort: 4 },
+  },
+  {
+    id: crypto.randomUUID(),
+    title: 'Mailing Project Intake & Application Builder Agent',
+    notes:
+      'Ingests sample mail pieces, validates machinability, mocks up barcode-ready layouts, and estimates internal production costs.',
+    column: 'Do Now',
+    votes: 0,
+    owner: '',
+    dueDate: '',
+    metrics: { impact: 5, revenue: 4, urgency: 4, confidence: 5, effort: 4 },
+  },
+  {
+    id: crypto.randomUUID(),
+    title: 'Production File Ingestion & Client Reporting Agent',
+    notes:
+      'Ingests machine job files/logs and auto-generates client-facing production and SLA reports.',
+    column: 'Do Next',
+    votes: 0,
+    owner: '',
+    dueDate: '',
+    metrics: { impact: 4, revenue: 4, urgency: 3, confidence: 4, effort: 4 },
+  },
 ]
 
 function mergeSeedIdeas(existingIdeas) {
