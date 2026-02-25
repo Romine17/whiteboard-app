@@ -46,6 +46,26 @@ const TASK_TEMPLATES = [
 const localSeedIdeas = [
   {
     id: crypto.randomUUID(),
+    title: 'Establish terms and conditions',
+    notes: 'Draft, review, and finalize terms and conditions for client engagements.',
+    column: 'Do Now',
+    votes: 0,
+    owner: 'Cory',
+    dueDate: '',
+    metrics: { impact: 4, revenue: 4, urgency: 4, confidence: 4, effort: 2 },
+  },
+  {
+    id: crypto.randomUUID(),
+    title: 'Create company LLC',
+    notes: 'File formation documents and complete LLC setup requirements.',
+    column: 'Do Now',
+    votes: 0,
+    owner: 'Cory',
+    dueDate: '',
+    metrics: { impact: 4, revenue: 3, urgency: 4, confidence: 4, effort: 2 },
+  },
+  {
+    id: crypto.randomUUID(),
     title: 'AI phone answering with calendar scheduling',
     notes: 'Answer calls, qualify lead/client need, and book directly on calendar.',
     column: 'Do Now',
