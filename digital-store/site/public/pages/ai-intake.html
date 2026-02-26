@@ -2,7 +2,12 @@
 const questions=[
  {k:'name',q:'What is your full name?',type:'text'},
  {k:'email',q:'What is your best email?',type:'email'},
- {k:'income',q:'Is your annual income currently above $300K?',type:'choice',opts:['Yes','No']},
+ {k:'annual_income',q:'What is your total annual income (USD)?',type:'text'},
+ {k:'income_w2',q:'How much is W-2 income (USD)?',type:'text'},
+ {k:'income_cap_gains',q:'How much is capital gains income (USD)?',type:'text'},
+ {k:'income_business',q:'How much is business income (USD)?',type:'text'},
+ {k:'income_retirement',q:'How much is retirement income (USD)?',type:'text'},
+ {k:'income_other',q:'How much is other income (USD)?',type:'text'},
  {k:'profile',q:'Which best describes you?',type:'choice',opts:['Business owner','High-income W-2','Both']},
  {k:'entity',q:'Current entity structure (if business owner)?',type:'choice',opts:['Sole Prop','LLC','S-Corp','C-Corp','N/A']},
  {k:'goal',q:'What is your top tax planning goal right now?',type:'text'},
