@@ -17,7 +17,11 @@ const priceMap = {
   pricing_engine: process.env.PRICE_PRICING_ENGINE,
   strategy_1040: process.env.PRICE_1040_STRATEGY,
   entity_playbook: process.env.PRICE_ENTITY_PLAYBOOK,
-  bundle: process.env.PRICE_BUNDLE
+  bundle: process.env.PRICE_BUNDLE,
+  tax_diagnostic: process.env.PRICE_TAX_DIAGNOSTIC,
+  annual_plan_deposit: process.env.PRICE_ANNUAL_PLAN_DEPOSIT,
+  high_income_w2: process.env.PRICE_HIGH_INCOME_W2,
+  mini_tax_checklist: process.env.PRICE_MINI_TAX_CHECKLIST
 };
 
 app.use(express.static(path.join(__dirname, 'public')));

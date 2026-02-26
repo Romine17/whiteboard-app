@@ -40,7 +40,15 @@
     <div class="card"><h3>1040 Strategy Session Kit</h3><p class="price">$297</p><button class="btn primary" onclick="buy('strategy_1040')">Buy</button></div>
     <div class="card"><h3>Entity Decision Playbook</h3><p class="price">$397</p><button class="btn primary" onclick="buy('entity_playbook')">Buy</button></div>
     <div class="card"><h3>Advisory Launch Bundle</h3><p class="price">$997</p><button class="btn primary" onclick="buy('bundle')">Buy</button></div>
+    <div class="card"><h3>Mini Tax Strategy Checklist</h3><p class="price">$49</p><ul><li>Entry-level offer</li><li>Lead qualifier</li><li>Upsell into diagnostic</li></ul><button class="btn primary" onclick="buy('mini_tax_checklist')">Buy</button></div>
+    <div class="card"><h3>High-Income W-2 Optimization Kit</h3><p class="price">$697</p><ul><li>Withholding + equity planning</li><li>Timing decision worksheet</li><li>Quarterly action map</li></ul><button class="btn primary" onclick="buy('high_income_w2')">Buy</button></div>
   </div></section>
+
+  <section id="offers"><h2>Premium Buying Options</h2><div class="grid g2">
+    <div class="card"><h3>Tax Strategy Diagnostic (Paid Session)</h3><p class="price">From $1,250</p><ul><li>90-minute strategy meeting</li><li>Written opportunity map</li><li>Implementation priorities</li></ul><button class="btn primary" onclick="buy('tax_diagnostic')">Reserve Spot</button></div>
+    <div class="card"><h3>Annual Strategy Plan Deposit</h3><p class="price">$2,500 Deposit</p><ul><li>Secures onboarding slot</li><li>Applied to annual plan fee</li><li>Priority quarterly planning</li></ul><button class="btn primary" onclick="buy('annual_plan_deposit')">Pay Deposit</button></div>
+  </div></section>
+
   <div class="note">No guaranteed outcomes. Results vary based on facts, timing, and applicable tax law.</div>
 </div>
 <script>async function buy(productKey){const r=await fetch('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productKey})});const d=await r.json();if(d.url)location.href=d.url;else alert(d.error||'Checkout unavailable');}</script>
