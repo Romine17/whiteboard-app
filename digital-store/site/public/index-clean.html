@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>RHW Tax Strategy Advisory — Clean</title>
+<style>
+:root{--bg:#f8fbff;--panel:#fff;--line:#dbe7f6;--text:#0f172a;--muted:#475569;--brand:#2563eb;--brand2:#0ea5e9}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}.wrap{max-width:1080px;margin:0 auto;padding:26px}
+.hero{background:linear-gradient(135deg,#eaf3ff,#f4fbff);border:1px solid var(--line);border-radius:16px;padding:34px}
+.tag{display:inline-block;background:#dbeafe;color:#1e40af;padding:6px 10px;border-radius:999px;font-size:12px}
+h1{font-size:40px;margin:10px 0}.sub{color:var(--muted);max-width:760px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{padding:11px 15px;border-radius:10px;border:0;cursor:pointer;font-weight:700}.primary{background:var(--brand);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:#1e3a8a}
+h2{margin:26px 0 10px}.grid{display:grid;gap:12px}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}.price{color:#0369a1;font-weight:700}.muted{color:var(--muted)}
+.note{margin-top:18px;padding:10px 12px;border-radius:10px;background:#ecfeff;border:1px solid #bae6fd;color:#0c4a6e}
+@media(max-width:900px){.g3,.g2{grid-template-columns:1fr}h1{font-size:32px}}
+</style></head>
+<body><div class="wrap">
+<div class="hero"><span class="tag">RHW Tax Strategy Advisory</span><h1>Tax Planning That’s Proactive, Practical, and Compliant</h1><p class="sub">Built for business owners and high-income earners who want strategic tax guidance throughout the year.</p><div class="row"><button class="btn primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">See Services</button><button class="btn secondary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">See Products</button></div></div>
+<h2 id="services">Services</h2><div class="grid g3">
+<div class="card"><h3>Tax Strategy Diagnostic</h3><p class="price">$750–$2,500</p><p class="muted">Initial assessment and opportunity roadmap.</p></div>
+<div class="card"><h3>Annual Tax Strategy Plan</h3><p class="price">$4,000–$15,000/yr</p><p class="muted">Quarterly planning and implementation support.</p></div>
+<div class="card"><h3>Entity & Compensation Optimization</h3><p class="price">$2,500–$10,000</p><p class="muted">Structure + owner pay planning.</p></div>
+</div>
+<h2 id="products">Digital Products</h2><div class="grid g2">
+<div class="card"><h3>Advisory Pricing Engine Kit</h3><p class="price">$497</p><button class="btn primary" onclick="buy('pricing_engine')">Buy now</button></div>
+<div class="card"><h3>1040 Strategy Session Kit</h3><p class="price">$297</p><button class="btn primary" onclick="buy('strategy_1040')">Buy now</button></div>
+<div class="card"><h3>Entity Decision Playbook</h3><p class="price">$397</p><button class="btn primary" onclick="buy('entity_playbook')">Buy now</button></div>
+<div class="card"><h3>Advisory Launch Bundle</h3><p class="price">$997</p><button class="btn primary" onclick="buy('bundle')">Buy now</button></div>
+</div>
+<div class="note">No guaranteed tax outcomes. Strategies depend on client facts, timing, and current law.</div>
+</div>
+<script>async function buy(productKey){const r=await fetch('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productKey})});const d=await r.json();if(d.url)location.href=d.url;else alert(d.error||'Checkout unavailable');}</script>
+</body></html>

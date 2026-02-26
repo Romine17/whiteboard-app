@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RHW Tax Strategy Advisory — Corporate</title>
+  <style>
+    :root{--bg:#0f0f10;--panel:#17181b;--line:#2a2b2f;--text:#f5f5f5;--muted:#b0b3bb;--gold:#d4af37}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px}
+    .hero{padding:60px 0;border-bottom:1px solid var(--line)}
+    .tag{display:inline-block;border:1px solid #5b4a17;color:#f1da8a;padding:6px 10px;border-radius:999px;font-size:12px}
+    h1{font-size:46px;line-height:1.1;margin:14px 0}.sub{color:var(--muted);max-width:760px}
+    .btn{padding:12px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:700}.primary{background:var(--gold);color:#161616}
+    .secondary{background:transparent;color:#e7d39a;border:1px solid #5b4a17}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    h2{margin:30px 0 12px}.grid{display:grid;gap:12px}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}.price{color:#f1da8a;font-weight:700}
+    ul{color:#d0d2d8}.note{margin-top:24px;padding:12px;border-left:3px solid var(--gold);background:#2a2412;color:#f6e6b1}
+    @media (max-width:900px){.g3,.g2{grid-template-columns:1fr}h1{font-size:34px}}
+  </style>
+</head>
+<body><div class="wrap">
+  <section class="hero">
+    <span class="tag">RHW Tax Strategy Advisory</span>
+    <h1>Strategic Tax Planning for Owners and High-Income Earners</h1>
+    <p class="sub">Premium advisory designed to improve tax efficiency with compliant planning, implementation guidance, and recurring oversight.</p>
+    <div class="row">
+      <button class="btn primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">View Services</button>
+      <button class="btn secondary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Digital Products</button>
+    </div>
+  </section>
+  <section id="services"><h2>Advisory Services</h2><div class="grid g3">
+    <div class="card"><h3>Tax Strategy Diagnostic</h3><p class="price">$750–$2,500</p><ul><li>Opportunity map</li><li>Action sequence</li><li>Quarterly priorities</li></ul></div>
+    <div class="card"><h3>Annual Strategy Plan</h3><p class="price">$4,000–$15,000/yr</p><ul><li>Quarterly cadence</li><li>Entity/comp checkpoints</li><li>Estimate planning</li></ul></div>
+    <div class="card"><h3>Entity Optimization</h3><p class="price">$2,500–$10,000</p><ul><li>LLC/S-Corp/C-Corp alternatives</li><li>Comp modeling</li><li>Implementation steps</li></ul></div>
+  </div></section>
+  <section id="products"><h2>Digital Products</h2><div class="grid g2">
+    <div class="card"><h3>Advisory Pricing Engine</h3><p class="price">$497</p><button class="btn primary" onclick="buy('pricing_engine')">Buy</button></div>
+    <div class="card"><h3>1040 Strategy Session Kit</h3><p class="price">$297</p><button class="btn primary" onclick="buy('strategy_1040')">Buy</button></div>
+    <div class="card"><h3>Entity Decision Playbook</h3><p class="price">$397</p><button class="btn primary" onclick="buy('entity_playbook')">Buy</button></div>
+    <div class="card"><h3>Advisory Launch Bundle</h3><p class="price">$997</p><button class="btn primary" onclick="buy('bundle')">Buy</button></div>
+  </div></section>
+  <div class="note">No guaranteed outcomes. Results vary based on facts, timing, and applicable tax law.</div>
+</div>
+<script>async function buy(productKey){const r=await fetch('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productKey})});const d=await r.json();if(d.url)location.href=d.url;else alert(d.error||'Checkout unavailable');}</script>
+</body></html>
