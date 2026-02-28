@@ -35,3 +35,12 @@ Created: 2026-02-26
 - "Designed for business owners and high-income earners over $300K"
 - "AI-guided intake before CPA consult for higher-quality strategy calls"
 - "No guaranteed outcomes; planning based on facts and current law"
+
+### Named strategy: "50 target scrape"
+- Definition: Scrape/research top 50 high-fit social creators/posts discussing tax strategy/tax advice (TikTok, YouTube, Instagram, Facebook), then produce ranked targets + tailored comment/DM scripts to drive traffic into the checklist funnel.
+- Purpose: Reusable outbound growth play to seed the Business Owner + High-Income Tax Checklist funnel.
+
+## Saved Prompt Snippets
+
+### GitHub prompt (saved 2026-02-28)
+- "Create a repository called \"whiteboard app\". Push my code to this repository. Invite DePassio.3@gmail.com to be a collaboration and have admin access."
