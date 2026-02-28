@@ -47,3 +47,12 @@ create table if not exists audit_events (
   metadata_json jsonb,
   created_at timestamptz not null default now()
 );
+
+create table if not exists api_rate_limits (
+  key text not null,
+  bucket bigint not null,
+  count integer not null default 0,
+  primary key (key, bucket)
+);
+
+create index if not exists idx_api_rate_limits_bucket on api_rate_limits(bucket);

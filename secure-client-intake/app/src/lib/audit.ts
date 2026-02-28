@@ -1,4 +1,4 @@
-import { q } from "@/lib/db";
+import { q } from "./db";
 
 export async function writeAudit(event: {
   actorType: "client" | "staff" | "system";

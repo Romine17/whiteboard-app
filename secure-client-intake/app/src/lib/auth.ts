@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { q } from "@/lib/db";
-import { randomToken, sha256 } from "@/lib/crypto";
+import { q } from "./db";
+import { randomToken, sha256 } from "./crypto";
 
 const SESSION_COOKIE = "rhw_intake_session";
 
@@ -43,7 +43,8 @@ export async function createSession(email: string) {
     [sessionHash, email.toLowerCase(), String(hours)]
   );
 
-  cookies().set(SESSION_COOKIE, sessionToken, {
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_COOKIE, sessionToken, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
@@ -53,7 +54,8 @@ export async function createSession(email: string) {
 }
 
 export async function requireIntakeSession() {
-  const session = cookies().get(SESSION_COOKIE)?.value;
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE)?.value;
   if (!session) return null;
   const hash = sha256(session);
   const rows = await q<{ email: string }>(

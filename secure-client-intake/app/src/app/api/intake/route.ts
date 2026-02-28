@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { intakeSchema } from "@/lib/schema";
-import { encryptField } from "@/lib/crypto";
-import { q } from "@/lib/db";
-import { requireIntakeSession } from "@/lib/auth";
-import { writeAudit } from "@/lib/audit";
+import { intakeSchema } from "../../../lib/schema";
+import { encryptField } from "../../../lib/crypto";
+import { q } from "../../../lib/db";
+import { requireIntakeSession } from "../../../lib/auth";
+import { writeAudit } from "../../../lib/audit";
+import { getClientIp } from "../../../lib/request";
+import { checkRateLimit } from "../../../lib/rate-limit";
 
 function mask(value: string | undefined, visible = 4) {
   if (!value) return value;
@@ -16,6 +18,12 @@ export async function POST(req: Request) {
     const session = await requireIntakeSession();
     if (!session) {
       return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const ip = await getClientIp();
+    const submitLimit = await checkRateLimit(`intake-submit:ip:${ip}`, 30, 30);
+    if (!submitLimit.allowed) {
+      return NextResponse.json({ ok: false, message: "Too many submissions" }, { status: 429 });
     }
 
     const body = await req.json();
@@ -63,6 +71,7 @@ export async function POST(req: Request) {
       action: "intake_submitted",
       resourceType: "intake_submission",
       resourceId: submissionId,
+      ip,
     });
 
     const safeEcho = {

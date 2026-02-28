@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { consumeMagicLink, createSession } from "@/lib/auth";
-import { writeAudit } from "@/lib/audit";
+import { consumeMagicLink, createSession } from "../../../../lib/auth";
+import { writeAudit } from "../../../../lib/audit";
 
 export async function GET(req: Request) {
   try {
