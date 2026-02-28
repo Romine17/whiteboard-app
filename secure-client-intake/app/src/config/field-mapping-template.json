@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "source": "secure_client_intake",
+  "mappings": [
+    {
+      "sourceField": "taxpayerFullName",
+      "targetField": "customer_name"
+    },
+    {
+      "sourceField": "taxpayerEmail",
+      "targetField": "email"
+    },
+    {
+      "sourceField": "currentStreetAddress",
+      "targetField": "street"
+    },
+    {
+      "sourceField": "currentCity",
+      "targetField": "city"
+    },
+    {
+      "sourceField": "currentState",
+      "targetField": "state"
+    },
+    {
+      "sourceField": "currentZip",
+      "targetField": "zip"
+    }
+  ]
+}
