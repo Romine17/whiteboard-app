@@ -763,11 +763,7 @@ function App() {
     return Boolean((idea.owner || '').trim()) && Boolean((idea.dueDate || '').trim()) && meta.subtasks.length > 0
   }
 
-  function validateMoveToDoNow(idea) {
-    if (!isReadyForDoNow(idea)) {
-      setStatus('Ready gate: assign owner, due date, and at least 1 checklist item before Do Now')
-      return false
-    }
+  function validateMoveToDoNow() {
     return true
   }
 
@@ -776,24 +772,13 @@ function App() {
     const current = ideas.find((idea) => idea.id === draggedId)
     if (!current) return
 
-    if (column === 'Do Now' && !validateMoveToDoNow(current)) {
-      setDraggedId(null)
-      return
-    }
-
-    if (lockedDoNowIds.includes(draggedId) && column !== 'Do Now') {
-      setStatus('Locked sprint task: unlock it first to move it out of Do Now')
-      setDraggedId(null)
-      return
-    }
-
     updateIdea(draggedId, (idea) => ({ ...idea, column }))
     setDraggedId(null)
   }
 
   function promoteToTask(id) {
     const current = ideas.find((idea) => idea.id === id)
-    if (!current || !validateMoveToDoNow(current)) return
+    if (!current) return
     updateIdea(id, (idea) => ({ ...idea, column: 'Do Now' }))
   }
 
@@ -816,10 +801,6 @@ function App() {
   }
 
   function markComplete(id) {
-    if (lockedDoNowIds.includes(id)) {
-      setStatus('Locked sprint task: unlock it first before marking complete')
-      return
-    }
     updateIdea(id, (idea) => ({ ...idea, column: 'Done' }))
   }
 
@@ -883,15 +864,6 @@ function App() {
     if (!editDraft.title.trim()) return
     const current = ideas.find((idea) => idea.id === id)
     if (!current) return
-
-    if (editDraft.column === 'Do Now' && current.column !== 'Do Now' && !validateMoveToDoNow(current)) {
-      return
-    }
-
-    if (lockedDoNowIds.includes(id) && editDraft.column !== 'Do Now') {
-      setStatus('Locked sprint task: unlock it first to move it out of Do Now')
-      return
-    }
 
     await updateIdea(id, (idea) => ({
       ...idea,
