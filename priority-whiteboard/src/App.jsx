@@ -669,6 +669,7 @@ function App() {
     if (hasSupabase) {
       const { error } = await supabase.from('ideas').insert(ideaToRow(idea))
       if (error) return setStatus(`Insert failed: ${error.message}`)
+      setIdeas((prev) => [idea, ...prev])
     } else {
       captureSnapshot()
       setIdeas((prev) => [idea, ...prev])
@@ -699,6 +700,7 @@ function App() {
     if (hasSupabase) {
       const { error } = await supabase.from('ideas').insert(ideaToRow(idea))
       if (error) return setStatus(`Template insert failed: ${error.message}`)
+      setIdeas((prev) => [idea, ...prev])
     } else {
       captureSnapshot()
       setIdeas((prev) => [idea, ...prev])
@@ -728,7 +730,8 @@ function App() {
 
     if (hasSupabase) {
       const { error } = await supabase.from('ideas').update(ideaToRow(updated)).eq('id', id)
-      if (error) setStatus(`Update failed: ${error.message}`)
+      if (error) return setStatus(`Update failed: ${error.message}`)
+      setIdeas((prev) => prev.map((idea) => (idea.id === id ? updated : idea)))
     } else {
       captureSnapshot()
       setIdeas((prev) => prev.map((idea) => (idea.id === id ? updated : idea)))
@@ -745,6 +748,7 @@ function App() {
     if (hasSupabase) {
       const { error } = await supabase.from('ideas').delete().eq('id', id)
       if (error) return setStatus(`Delete failed: ${error.message}`)
+      setIdeas((prev) => prev.filter((idea) => idea.id !== id))
     } else {
       captureSnapshot()
       setIdeas((prev) => prev.filter((idea) => idea.id !== id))
