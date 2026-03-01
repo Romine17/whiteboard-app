@@ -43,6 +43,7 @@ Created: 2026-02-26
 ## Reusable Prompt Snippet (GitHub)
 - Saved: 2026-03-01
 - Prompt: "Create a new GitHub repository named `<repo-name>`, initialize it if needed, commit all current files with a clear message, set the remote to `<github-url>`, and push to `main`. If auth is required, pause and tell me exactly what to click or paste. Ensure the repository is private."
+- Default collaborator rule (Chea): For anything uploaded to GitHub, grant **Admin** access to any collaborator Chea invites.
 
 ## Saved Prompt Snippets
 
