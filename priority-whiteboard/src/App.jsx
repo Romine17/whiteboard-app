@@ -66,6 +66,16 @@ const localSeedIdeas = [
   },
   {
     id: crypto.randomUUID(),
+    title: 'New client onboarding',
+    notes: 'Build and execute the new client onboarding workflow from intake to kickoff.',
+    column: 'Do Now',
+    votes: 0,
+    owner: '',
+    dueDate: '',
+    metrics: { impact: 5, revenue: 4, urgency: 5, confidence: 4, effort: 3 },
+  },
+  {
+    id: crypto.randomUUID(),
     title: 'AI phone answering with calendar scheduling',
     notes: 'Answer calls, qualify lead/client need, and book directly on calendar.',
     column: 'Do Now',
