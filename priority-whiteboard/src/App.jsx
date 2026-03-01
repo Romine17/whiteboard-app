@@ -1178,6 +1178,22 @@ function App() {
                         <span className="task-caret" aria-hidden="true">{isSelectedTask ? '▾' : '▸'}</span>
                         <span>{visibleTaskNumbers.get(idea.id)} — {idea.title}</span>
                       </h3>
+                      <div className="quick-move" onClick={(e) => e.stopPropagation()}>
+                        <label>
+                          Move to
+                          <select
+                            aria-label="Quick move column"
+                            value={idea.column}
+                            onChange={(e) => updateIdea(idea.id, (i) => ({ ...i, column: e.target.value }))}
+                          >
+                            {COLUMNS.map((col) => (
+                              <option key={col} value={col}>
+                                {col}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
                       {notesPreview && <p className="notes-preview">{notesPreview}</p>}
                     </>
                   )}
