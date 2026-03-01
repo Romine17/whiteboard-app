@@ -259,6 +259,25 @@ button.danger {
   box-shadow: 0 0 0 2px rgba(23, 92, 211, 0.12);
 }
 
+.card-collapsed {
+  padding: 0.48rem 0.55rem;
+}
+
+.card-collapsed .notes-preview,
+.card-collapsed .assignee,
+.card-collapsed .quick-inline,
+.card-collapsed .ready,
+.card-collapsed .mini-meta,
+.card-collapsed .blocked,
+.card-collapsed .deps,
+.card-collapsed .meta,
+.card-collapsed .task-fields,
+.card-collapsed .checklist,
+.card-collapsed .task-detail,
+.card-collapsed .activity-log {
+  display: none;
+}
+
 .card h3 {
   margin: 0 0 0.2rem;
   font-size: 0.95rem;

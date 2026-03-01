@@ -1137,7 +1137,7 @@ function App() {
               return (
                 <article
                   key={idea.id}
-                  className={`card ${isSelectedTask ? 'card-selected' : ''}`}
+                  className={`card ${isSelectedTask ? 'card-selected' : 'card-collapsed'}`}
                   draggable={!isEditing}
                   onDragStart={() => setDraggedId(idea.id)}
                   onClick={() => setSelectedTaskId((prev) => (prev === idea.id ? null : idea.id))}
