@@ -87,7 +87,7 @@ header p {
 
 .toolbar-main {
   display: grid;
-  grid-template-columns: 2fr 2fr auto auto auto auto auto;
+  grid-template-columns: 2fr 2fr auto auto auto auto auto auto;
   gap: 0.55rem;
   align-items: end;
 }

@@ -3,6 +3,7 @@ import './App.css'
 import { hasSupabase, supabase } from './supabase'
 
 const COLUMNS = ['Do Now', 'Do Next', 'Later', 'Done']
+const OPS_COLUMNS = ['Do Now', 'Do Next', 'Later']
 
 const TEAM_MEMBERS = [
   { name: 'Unassigned', email: '' },
@@ -364,6 +365,7 @@ function App() {
   const [showDone, setShowDone] = useState(true)
   const [showShortcuts, setShowShortcuts] = useState(false)
   const [sortMode, setSortMode] = useState('manual')
+  const [boardMode, setBoardMode] = useState('ops')
   const [quickFilter, setQuickFilter] = useState('all')
   const [expandedColumns, setExpandedColumns] = useState({})
   const [showSecondaryPanels, setShowSecondaryPanels] = useState(false)
@@ -508,10 +510,12 @@ function App() {
     [ideas, myTasksFor],
   )
 
-  const visibleColumns = useMemo(
-    () => (focusColumn === 'All' ? COLUMNS : [focusColumn]),
-    [focusColumn],
-  )
+  const visibleColumns = useMemo(() => {
+    const baseColumns = boardMode === 'ops' ? OPS_COLUMNS : COLUMNS
+    if (focusColumn !== 'All') return [focusColumn]
+    if (boardMode === 'ops' && !showDone) return baseColumns
+    return boardMode === 'ops' ? [...baseColumns, 'Done'] : baseColumns
+  }, [focusColumn, boardMode, showDone])
 
   const orderedVisibleIdeas = useMemo(() => COLUMNS.flatMap((column) => groupedIdeas[column] || []), [groupedIdeas])
 
@@ -1032,6 +1036,13 @@ function App() {
             <button type="button" className={quickFilter === 'high' ? 'chip chip-active' : 'chip'} onClick={() => setQuickFilter('high')}>High Priority</button>
             <button type="button" className={quickFilter === 'mine' ? 'chip chip-active' : 'chip'} onClick={() => setQuickFilter('mine')}>Mine ({myTasksFor})</button>
           </div>
+          <label>
+            Layout
+            <select value={boardMode} onChange={(e) => setBoardMode(e.target.value)}>
+              <option value="ops">Now / Next / Later</option>
+              <option value="classic">Classic 4-column</option>
+            </select>
+          </label>
           <label className="checkbox-inline">
             <input type="checkbox" checked={showDone} onChange={(e) => setShowDone(e.target.checked)} />
             Show Done
