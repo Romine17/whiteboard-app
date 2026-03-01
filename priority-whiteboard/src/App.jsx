@@ -771,11 +771,9 @@ function App() {
     return true
   }
 
-  function onDropColumn(column, event) {
-    event?.preventDefault?.()
-    const droppedId = draggedId || event?.dataTransfer?.getData('text/plain')
-    if (!droppedId) return
-    const current = ideas.find((idea) => idea.id === droppedId)
+  function onDropColumn(column) {
+    if (!draggedId) return
+    const current = ideas.find((idea) => idea.id === draggedId)
     if (!current) return
 
     if (column === 'Do Now' && !validateMoveToDoNow(current)) {
@@ -783,13 +781,13 @@ function App() {
       return
     }
 
-    if (lockedDoNowIds.includes(droppedId) && column !== 'Do Now') {
+    if (lockedDoNowIds.includes(draggedId) && column !== 'Do Now') {
       setStatus('Locked sprint task: unlock it first to move it out of Do Now')
       setDraggedId(null)
       return
     }
 
-    updateIdea(droppedId, (idea) => ({ ...idea, column }))
+    updateIdea(draggedId, (idea) => ({ ...idea, column }))
     setDraggedId(null)
   }
 
@@ -1122,11 +1120,8 @@ function App() {
           <div
             key={column}
             className="column"
-            onDragOver={(e) => {
-              e.preventDefault()
-              e.dataTransfer.dropEffect = 'move'
-            }}
-            onDrop={(e) => onDropColumn(column, e)}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={() => onDropColumn(column)}
           >
             <h2>
               {column} <span className="column-count">({groupedIdeas[column].length})</span>
@@ -1144,12 +1139,7 @@ function App() {
                   key={idea.id}
                   className={`card ${isSelectedTask ? 'card-selected' : 'card-collapsed'}`}
                   draggable={!isEditing}
-                  onDragStart={(e) => {
-                    e.dataTransfer.effectAllowed = 'move'
-                    e.dataTransfer.setData('text/plain', idea.id)
-                    setDraggedId(idea.id)
-                  }}
-                  onDragEnd={() => setDraggedId(null)}
+                  onDragStart={() => setDraggedId(idea.id)}
                   onClick={() => setSelectedTaskId((prev) => (prev === idea.id ? null : idea.id))}
                 >
                   {isEditing ? (
