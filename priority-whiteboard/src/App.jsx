@@ -334,6 +334,7 @@ function App() {
   })
 
   const [draggedId, setDraggedId] = useState(null)
+  const didDragRef = useRef(false)
   const [assigneeFilter, setAssigneeFilter] = useState('All')
   const [myTasksFor, setMyTasksFor] = useState('Chea')
   const [editingIdeaId, setEditingIdeaId] = useState(null)
@@ -1115,8 +1116,9 @@ function App() {
                   key={idea.id}
                   className={`card ${isSelectedTask ? 'card-selected' : 'card-collapsed'}`}
                   draggable={!isEditing}
-                  onDragStart={() => setDraggedId(idea.id)}
-                  onClick={() => setSelectedTaskId((prev) => (prev === idea.id ? null : idea.id))}
+                  onDragStart={() => { didDragRef.current = false; setDraggedId(idea.id) }}
+                  onDragEnd={() => { didDragRef.current = true; setDraggedId(null) }}
+                  onClick={() => { if (didDragRef.current) { didDragRef.current = false; return } setSelectedTaskId((prev) => (prev === idea.id ? null : idea.id)) }}
                 >
                   {isEditing ? (
                     <>
